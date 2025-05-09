@@ -184,6 +184,17 @@ func parseKeyValue(s string) ([]string, error) {
 		return []string{}, noSuchKeyError(arr[0])
 	}
 
+	switch arr[0] {
+	case "short":
+		if !strings.HasPrefix(arr[1], "-") {
+			arr[1] = "-" + arr[1]
+		}
+	case "long":
+		if !strings.HasPrefix(arr[1], "--") {
+			arr[1] = "--" + arr[1]
+		}
+	}
+
 	return arr, nil
 }
 
