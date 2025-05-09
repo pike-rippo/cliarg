@@ -5,10 +5,14 @@ import (
 	"fmt"
 )
 
-func noSuchKeyError(key string) error {
-	return fmt.Errorf("no such key: %s", key)
+func continuousSemicolonError() error {
+	return errors.New("cliarg: syntax error: continuous semicolon")
 }
 
-func conflictFlagNameError() error {
-	return errors.New("flag name collision")
+func noSuchKeyError(key string) error {
+	return fmt.Errorf("cliarg: no such key: \"%s\"", key)
+}
+
+func conflictFlagNameError(name string) error {
+	return fmt.Errorf("cliarg: flag name collision: \"%s\"", name)
 }

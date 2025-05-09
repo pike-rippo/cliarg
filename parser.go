@@ -43,7 +43,7 @@ func Parse[T any](input []string) (result T, positionalArg []string, err error) 
 				isSet = true
 				ok := data.AddName(a[1], i)
 				if !ok {
-					return result, []string{}, conflictFlagNameError()
+					return result, []string{}, conflictFlagNameError(a[1])
 				}
 			case "default":
 				err = setDefaultValue(&info, &value, a[1])
@@ -121,7 +121,7 @@ func PrintHelp[T any]() {
 			if a[0] == "help" && len(a) == 2 {
 				help := strings.Replace(a[1], `\\t`, "\t", -1)
 				help = strings.Replace(help, `\\n`, "\n", -1)
-				fmt.Fprintf(os.Stderr, "%s\n", help)
+				fmt.Println(help)
 			}
 		}
 	}
@@ -179,6 +179,10 @@ func setValue(info fieldInfo, value *reflect.Value, s, flagName string) error {
 
 func parseKeyValue(s string) ([]string, error) {
 	arr := splitByEqual(s)
+
+	if len(arr[0]) == 0 {
+		return []string{}, continuousSemicolonError()
+	}
 
 	if !slices.Contains(tagKeys, arr[0]) {
 		return []string{}, noSuchKeyError(arr[0])
